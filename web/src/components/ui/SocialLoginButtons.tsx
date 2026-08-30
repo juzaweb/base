@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { useGetSocialProvidersQuery } from '../../store/services/authApi';
 
 const GoogleIcon: FC = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -21,6 +22,12 @@ const GoogleIcon: FC = () => (
   </svg>
 );
 
+const FacebookIcon: FC = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#1877F2">
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+  </svg>
+);
+
 const GitHubIcon: FC = () => (
   <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
     <path
@@ -31,6 +38,12 @@ const GitHubIcon: FC = () => (
   </svg>
 );
 
+const ICON_MAP: Record<string, FC> = {
+  google: GoogleIcon,
+  facebook: FacebookIcon,
+  github: GitHubIcon,
+};
+
 interface SocialLoginButtonsProps {
   /** Optional label shown in the divider between social and email login */
   dividerLabel?: string;
@@ -38,37 +51,39 @@ interface SocialLoginButtonsProps {
 
 export const SocialLoginButtons: FC<SocialLoginButtonsProps> = ({
   dividerLabel = 'Or continue with email',
-}) => (
-  <>
-    <div className="grid grid-cols-2 gap-3">
-      <button
-        type="button"
-        onClick={() => {
-          window.location.href = '/api/v1/auth/user/social/google/redirect';
-        }}
-        className="flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 hover:bg-slate-50 dark:hover:bg-slate-800/80 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors shadow-xs cursor-pointer"
-      >
-        <GoogleIcon />
-        <span>Google</span>
-      </button>
+}) => {
+  const { data } = useGetSocialProvidersQuery();
+  const providers = data?.data ?? [];
 
-      <button
-        type="button"
-        onClick={() => {
-          window.location.href = '/api/v1/auth/user/social/github/redirect';
-        }}
-        className="flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 hover:bg-slate-50 dark:hover:bg-slate-800/80 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors shadow-xs cursor-pointer"
-      >
-        <GitHubIcon />
-        <span>GitHub</span>
-      </button>
-    </div>
+  if (providers.length === 0) return null;
 
-    <div className="relative flex items-center justify-center">
-      <div className="border-t border-slate-200 dark:border-white/[0.08] w-full" />
-      <span className="bg-white dark:bg-[#0F1626] px-3 text-[11px] uppercase tracking-wider text-slate-400 font-medium absolute">
-        {dividerLabel}
-      </span>
-    </div>
-  </>
-);
+  return (
+    <>
+      <div className="grid grid-cols-2 gap-3">
+        {providers.map((provider) => {
+          const Icon = ICON_MAP[provider.icon];
+          return (
+            <button
+              key={provider.driver}
+              type="button"
+              onClick={() => {
+                window.location.href = `/api/v1/auth/user/social/${provider.driver}/redirect`;
+              }}
+              className="flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 hover:bg-slate-50 dark:hover:bg-slate-800/80 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors shadow-xs cursor-pointer"
+            >
+              {Icon && <Icon />}
+              <span>{provider.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="relative flex items-center justify-center">
+        <div className="border-t border-slate-200 dark:border-white/[0.08] w-full" />
+        <span className="bg-white dark:bg-[#0F1626] px-3 text-[11px] uppercase tracking-wider text-slate-400 font-medium absolute">
+          {dividerLabel}
+        </span>
+      </div>
+    </>
+  );
+};

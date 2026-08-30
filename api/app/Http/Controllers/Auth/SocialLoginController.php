@@ -27,6 +27,20 @@ class SocialLoginController extends Controller
     /** Supported social login providers. */
     private const SUPPORTED_DRIVERS = ['google', 'facebook', 'github'];
 
+    /** Map driver => env key used to detect whether the provider is configured. */
+    private const DRIVER_ENV_MAP = [
+        'google' => 'GOOGLE_CLIENT_ID',
+        'facebook' => 'FACEBOOK_CLIENT_ID',
+        'github' => 'GITHUB_CLIENT_ID',
+    ];
+
+    /** Labels and icons for frontend rendering. */
+    private const DRIVER_META = [
+        'google' => ['label' => 'Google', 'icon' => 'google'],
+        'facebook' => ['label' => 'Facebook', 'icon' => 'facebook'],
+        'github' => ['label' => 'GitHub', 'icon' => 'github'],
+    ];
+
     private function validateDriver(string $driver): void
     {
         if (!in_array($driver, self::SUPPORTED_DRIVERS, true)) {
@@ -34,6 +48,31 @@ class SocialLoginController extends Controller
                 'driver' => ['Unsupported social provider.'],
             ]);
         }
+    }
+
+    /**
+     * List configured social providers so the frontend can render buttons dynamically.
+     */
+    #[OA\Get(
+        path: "/api/v1/auth/social-providers",
+        summary: "List available social login providers",
+        operationId: "user.social.providers",
+        tags: ["Auth"],
+        responses: [
+            new OA\Response(response: 200, description: "Available providers"),
+        ]
+    )]
+    public function providers(): \Illuminate\Http\JsonResponse
+    {
+        $available = collect(self::SUPPORTED_DRIVERS)
+            ->filter(fn (string $driver) => !empty(env(self::DRIVER_ENV_MAP[$driver])))
+            ->map(fn (string $driver) => [
+                'driver' => $driver,
+                ...self::DRIVER_META[$driver],
+            ])
+            ->values();
+
+        return response()->json(['data' => $available]);
     }
 
     #[OA\Get(

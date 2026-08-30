@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('ping', fn () => response()->json(['status' => 'ok']));
 
+Route::prefix('auth')->group(function () {
+    Route::get('social-providers', [SocialLoginController::class, 'providers'])->name('api.auth.social-providers');
+});
+
 Route::prefix('auth/user')->group(function () {
     Route::middleware('throttle:auth')->group(function () {
         Route::post('login', [AuthController::class, 'login']);

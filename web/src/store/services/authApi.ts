@@ -10,6 +10,7 @@ import type {
   ResetPasswordPayload,
   ResendVerificationEmailPayload,
   ChangePasswordPayload,
+  SocialProvider,
 } from '../../types/auth';
 
 export const authApi = apiSlice.injectEndpoints({
@@ -106,6 +107,13 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
+    getSocialProviders: builder.query<ApiResponse<SocialProvider[]>, void>({
+      query: () => ({
+        url: '/auth/social-providers',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -118,4 +126,5 @@ export const {
   useVerifyEmailMutation,
   useChangePasswordMutation,
   useLogoutMutation,
+  useGetSocialProvidersQuery,
 } = authApi;

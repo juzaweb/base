@@ -64,3 +64,9 @@ export interface ChangePasswordPayload {
   password: string;
   password_confirmation: string;
 }
+
+export interface SocialProvider {
+  driver: string;
+  label: string;
+  icon: string;
+}
