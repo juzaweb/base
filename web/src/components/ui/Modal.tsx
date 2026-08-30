@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
+import { type FC, type ReactNode, useEffect } from 'react';
 import { X } from 'lucide-react';
 
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  children: React.ReactNode;
+  title?: ReactNode;
+  description?: ReactNode;
+  children: ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '4xl';
   showCloseButton?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal: FC<ModalProps> = ({
   isOpen,
   onClose,
   title,

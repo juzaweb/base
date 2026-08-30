@@ -1,13 +1,13 @@
-import React from 'react';
+import type { FC, HTMLAttributes, ReactNode } from 'react';
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
   variant?: 'default' | 'glass' | 'bordered' | 'interactive';
   className?: string;
   glow?: boolean;
 }
 
-export const Card: React.FC<CardProps> = ({
+export const Card: FC<CardProps> = ({
   children,
   variant = 'default',
   className = '',
@@ -39,12 +39,12 @@ export const Card: React.FC<CardProps> = ({
   );
 };
 
-export const CardHeader: React.FC<{
-  title?: React.ReactNode;
-  subtitle?: React.ReactNode;
-  action?: React.ReactNode;
+export const CardHeader: FC<{
+  title?: ReactNode;
+  subtitle?: ReactNode;
+  action?: ReactNode;
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }> = ({ title, subtitle, action, className = '', children }) => {
   if (children) {
     return (
@@ -75,15 +75,15 @@ export const CardHeader: React.FC<{
   );
 };
 
-export const CardBody: React.FC<{
-  children: React.ReactNode;
+export const CardBody: FC<{
+  children: ReactNode;
   className?: string;
 }> = ({ children, className = '' }) => {
   return <div className={`p-6 ${className}`}>{children}</div>;
 };
 
-export const CardFooter: React.FC<{
-  children: React.ReactNode;
+export const CardFooter: FC<{
+  children: ReactNode;
   className?: string;
 }> = ({ children, className = '' }) => {
   return (

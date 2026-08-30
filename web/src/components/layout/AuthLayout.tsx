@@ -1,9 +1,9 @@
-import React from 'react';
+import type { FC } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Sparkles, Sun, Moon, Zap, CheckCircle2, ShieldCheck, Globe } from 'lucide-react';
 import { useTheme } from '../../context/useTheme';
 
-export const AuthLayout: React.FC = () => {
+export const AuthLayout: FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (

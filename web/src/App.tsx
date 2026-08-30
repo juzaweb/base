@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthLayout } from './components/layout/AuthLayout';
@@ -32,8 +31,8 @@ export function App() {
             <Route path="*" element={<Navigate to="/auth/login" replace />} />
           </Route>
 
-          {/* Redirect root to auth login */}
-          <Route path="/" element={<Navigate to="/auth/login" replace />} />
+          {/* Redirect root to dashboard (uses ProtectedRoute — unauthenticated users go to login) */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
           {/* Catch all */}
           <Route path="*" element={<Navigate to="/auth/login" replace />} />

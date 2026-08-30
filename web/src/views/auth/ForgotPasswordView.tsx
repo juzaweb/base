@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Mail, ArrowLeft, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Mail, ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useForgotPasswordMutation } from '../../store/services/authApi';
 import { getErrorMessage } from '../../utils/apiError';
+import { ErrorAlert } from '../../components/ui/ErrorAlert';
+import { EMAIL_REGEX } from '../../utils/constants';
 
 interface ForgotPasswordFormInputs {
   email: string;
 }
 
-export const ForgotPasswordView: React.FC = () => {
+export const ForgotPasswordView = () => {
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -91,12 +93,7 @@ export const ForgotPasswordView: React.FC = () => {
       </div>
 
       {/* Backend Error Alert */}
-      {serverErrorMessage && (
-        <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs flex items-center gap-2.5 animate-in fade-in">
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span>{serverErrorMessage}</span>
-        </div>
-      )}
+      {serverErrorMessage && <ErrorAlert message={serverErrorMessage} />}
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
@@ -110,7 +107,7 @@ export const ForgotPasswordView: React.FC = () => {
           {...register('email', {
             required: 'Email address is required',
             pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              value: EMAIL_REGEX,
               message: 'Please enter a valid email address',
             },
           })}

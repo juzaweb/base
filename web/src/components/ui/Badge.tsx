@@ -1,7 +1,7 @@
-import React from 'react';
+import type { FC, ReactNode } from 'react';
 
 export interface BadgeProps {
-  children: React.ReactNode;
+  children: ReactNode;
   variant?: 'primary' | 'emerald' | 'amber' | 'rose' | 'slate' | 'violet' | 'cyan';
   size?: 'sm' | 'md' | 'lg';
   dot?: boolean;
@@ -9,7 +9,7 @@ export interface BadgeProps {
   className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({
+export const Badge: FC<BadgeProps> = ({
   children,
   variant = 'primary',
   size = 'md',

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
 import type { Theme } from '../types';
 import { ThemeContext } from './themeContextDef';
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     const saved = localStorage.getItem('site_theme');
     if (saved === 'dark' || saved === 'light') {

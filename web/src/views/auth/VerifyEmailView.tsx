@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { MailCheck, ArrowRight, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -6,7 +6,7 @@ import { Input } from '../../components/ui/Input';
 import { useResendVerificationEmailMutation } from '../../store/services/authApi';
 import { getErrorMessage } from '../../utils/apiError';
 
-export const VerifyEmailView: React.FC = () => {
+export const VerifyEmailView = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const emailParam = searchParams.get('email') || '';
@@ -14,8 +14,20 @@ export const VerifyEmailView: React.FC = () => {
   const [email, setEmail] = useState(emailParam);
   const [resendStatus, setResendStatus] = useState<'idle' | 'sent'>('idle');
   const [validationError, setValidationError] = useState<string | null>(null);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [resendEmail, { isLoading, error: apiError }] = useResendVerificationEmailMutation();
+
+  const cleanupTimer = useCallback(() => {
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return cleanupTimer;
+  }, [cleanupTimer]);
 
   const handleResend = async () => {
     setValidationError(null);
@@ -27,7 +39,8 @@ export const VerifyEmailView: React.FC = () => {
     try {
       await resendEmail({ email }).unwrap();
       setResendStatus('sent');
-      setTimeout(() => setResendStatus('idle'), 5000);
+      cleanupTimer();
+      resetTimerRef.current = setTimeout(() => setResendStatus('idle'), 5000);
     } catch {
       // Handled by apiError
     }

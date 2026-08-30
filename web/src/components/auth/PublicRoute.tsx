@@ -1,16 +1,16 @@
-import React from 'react';
+import { type FC, type ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks';
 
 interface PublicRouteProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
+export const PublicRoute: FC<PublicRouteProps> = ({ children }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
