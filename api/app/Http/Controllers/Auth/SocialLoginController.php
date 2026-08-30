@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthResource;
+use App\Http\Resources\MessageResource;
 use App\Http\Resources\SocialRedirectResource;
 use App\Models\User;
 use App\Models\UserSocialConnection;
@@ -13,7 +14,6 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
@@ -24,6 +24,18 @@ use OpenApi\Attributes as OA;
 
 class SocialLoginController extends Controller
 {
+    /** Supported social login providers. */
+    private const SUPPORTED_DRIVERS = ['google', 'facebook', 'github'];
+
+    private function validateDriver(string $driver): void
+    {
+        if (!in_array($driver, self::SUPPORTED_DRIVERS, true)) {
+            throw ValidationException::withMessages([
+                'driver' => ['Unsupported social provider.'],
+            ]);
+        }
+    }
+
     #[OA\Get(
         path: "/api/v1/auth/user/social/{driver}/redirect",
         summary: "Login User with Social Redirect",
@@ -34,7 +46,7 @@ class SocialLoginController extends Controller
                 name: "driver",
                 in: "path",
                 required: true,
-                description: "Social Driver (google, facebook, github...)",
+                description: "Social Driver (google, facebook, github)",
                 schema: new OA\Schema(type: "string")
             ),
         ],
@@ -53,6 +65,8 @@ class SocialLoginController extends Controller
     )]
     public function redirect(string $driver): SocialRedirectResource
     {
+        $this->validateDriver($driver);
+
         try {
             /** @var AbstractProvider $provider */
             $provider = Socialite::driver($driver);
@@ -104,6 +118,8 @@ class SocialLoginController extends Controller
     )]
     public function callback(Request $request, string $driver): AuthResource
     {
+        $this->validateDriver($driver);
+
         try {
             /** @var AbstractProvider $provider */
             $provider = Socialite::driver($driver);
@@ -124,19 +140,16 @@ class SocialLoginController extends Controller
         $userSocial = UserSocialConnection::findByProvider($driver, $socialUser->getId());
 
         if ($userSocial) {
-            $user = $userSocial->user;
-            return $this->loginAndResponseWithResource($user, $driver);
+            return $this->loginSocialUser($userSocial->user);
         }
 
         $user = DB::transaction(function () use ($socialUser, $driver) {
-            $randomPassword = Str::random(24);
-
             /** @var User $user */
             $user = User::query()->firstOrCreate(
                 ['email' => $socialUser->getEmail()],
                 [
                     'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'User',
-                    'password' => $randomPassword,
+                    'password' => Str::random(24),
                 ]
             );
 
@@ -162,16 +175,26 @@ class SocialLoginController extends Controller
             return $user;
         });
 
-        return $this->loginAndResponseWithResource($user, $driver);
+        return $this->loginSocialUser($user);
     }
 
-    protected function loginAndResponseWithResource(User $user, string $driver): AuthResource
+    /**
+     * Issue a password grant token for a social-login user.
+     *
+     * Always generates a fresh random password, hashes and stores it,
+     * then passes the plaintext to the password grant (since the OAuth
+     * server validates via Hash::check against the stored hash).
+     */
+    private function loginSocialUser(User $user): AuthResource
     {
         event(new Login('api', $user, true));
 
+        $plaintextPassword = Str::random(24);
+        $user->forceFill(['password' => $plaintextPassword])->save();
+
         $tokenResponse = User::generatePasswordGrantToken(
             $user->email,
-            $user->password . md5(config('app.key'))
+            $plaintextPassword
         );
 
         return AuthResource::make([

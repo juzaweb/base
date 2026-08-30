@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Http\Controllers\ConvertsPsrResponses;
-use Laravel\Passport\Passport;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use OpenApi\Attributes as OA;
@@ -67,6 +66,10 @@ class AuthController extends Controller
     )]
     public function login(LoginRequest $request): AuthResource
     {
+        $user = User::query()->where('email', $request->post('email'))->first();
+
+        abort_if($user === null, 404, 'User not found');
+
         try {
             $response = User::generatePasswordGrantToken(
                 $request->post('email'),
@@ -77,10 +80,6 @@ class AuthController extends Controller
                 'email' => [$e->getMessage()],
             ]);
         }
-
-        $user = User::query()->where('email', $request->post('email'))->first();
-
-        abort_if($user === null, 404, 'User not found');
 
         event(new Login('api', $user, true));
 
@@ -121,21 +120,12 @@ class AuthController extends Controller
     )]
     public function refreshToken(RefreshTokenRequest $request): TokenResource
     {
-        $config = config('auth.providers.users.passport', []);
-        $clientId = $config['client_id'] ?? null;
-        $clientSecret = $config['client_secret'] ?? null;
+        ['client_id' => $clientId, 'client_secret' => $clientSecret] = User::resolvePasswordClient();
 
         if (!$clientId || !$clientSecret) {
-            $client = Passport::client()
-                ->newQuery()
-                ->where('revoked', false)
-                ->where('password_client', true)
-                ->first();
-
-            if ($client) {
-                $clientId = $client->id;
-                $clientSecret = $client->secret;
-            }
+            throw ValidationException::withMessages([
+                'refresh_token' => ['OAuth password client is not configured.'],
+            ]);
         }
 
         $requestData = [
