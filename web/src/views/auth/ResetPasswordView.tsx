@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Lock, Eye, EyeOff, KeyRound, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useResetPasswordMutation } from '../../store/services/authApi';
@@ -16,6 +17,7 @@ interface ResetPasswordFormInputs {
 }
 
 export const ResetPasswordView = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const emailParam = searchParams.get('email') || '';
@@ -61,10 +63,10 @@ export const ResetPasswordView = () => {
       <div className="space-y-6 text-center animate-in fade-in duration-200">
         <div className="space-y-2">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Invalid reset link
+            {t('auth.resetPassword.invalidLink')}
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
-            This password reset link is invalid or has expired. Please request a new one.
+            {t('auth.resetPassword.invalidLinkDesc')}
           </p>
         </div>
         <div className="pt-2">
@@ -72,7 +74,7 @@ export const ResetPasswordView = () => {
             to="/auth/forgot-password"
             className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
           >
-            Request new reset link
+            {t('auth.resetPassword.requestNew')}
           </Link>
         </div>
       </div>
@@ -88,10 +90,10 @@ export const ResetPasswordView = () => {
 
         <div className="space-y-2">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Password updated!
+            {t('auth.resetPassword.successTitle')}
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
-            Your password has been successfully reset. You can now use your new password to sign in.
+            {t('auth.resetPassword.successMessage')}
           </p>
         </div>
 
@@ -102,7 +104,7 @@ export const ResetPasswordView = () => {
             className="w-full"
             onClick={() => navigate('/auth/login')}
           >
-            Proceed to Sign In
+            {t('auth.resetPassword.proceedToSignIn')}
           </Button>
         </div>
       </div>
@@ -114,10 +116,10 @@ export const ResetPasswordView = () => {
       {/* Header */}
       <div className="text-center space-y-1.5">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Create new password
+          {t('auth.resetPassword.title')}
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Your new password must be at least 8 characters
+          {t('auth.resetPassword.subtitle')}
         </p>
       </div>
 
@@ -127,24 +129,24 @@ export const ResetPasswordView = () => {
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <Input
-          label="Email address"
+          label={t('auth.resetPassword.emailLabel')}
           type="email"
-          placeholder="you@example.com"
+          placeholder={t('auth.resetPassword.emailPlaceholder')}
           autoComplete="email"
           error={errors.email?.message}
           {...register('email', {
-            required: 'Email address is required',
+            required: t('auth.resetPassword.errors.emailRequired'),
             pattern: {
               value: EMAIL_REGEX,
-              message: 'Please enter a valid email address',
+              message: t('auth.resetPassword.errors.emailInvalid'),
             },
           })}
         />
 
         <Input
-          label="New Password"
+          label={t('auth.resetPassword.newPasswordLabel')}
           type={showPassword ? 'text' : 'password'}
-          placeholder="Min. 8 characters"
+          placeholder={t('auth.resetPassword.newPasswordPlaceholder')}
           leftIcon={<Lock className="w-4 h-4" />}
           autoComplete="new-password"
           error={errors.password?.message}
@@ -163,25 +165,25 @@ export const ResetPasswordView = () => {
             </button>
           }
           {...register('password', {
-            required: 'Password is required',
+            required: t('auth.resetPassword.errors.passwordRequired'),
             minLength: {
               value: MIN_PASSWORD_LENGTH,
-              message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
+              message: t('auth.resetPassword.errors.passwordMinLength', { min: MIN_PASSWORD_LENGTH }),
             },
           })}
         />
 
         <Input
-          label="Confirm New Password"
+          label={t('auth.resetPassword.confirmPasswordLabel')}
           type={showPassword ? 'text' : 'password'}
-          placeholder="Repeat new password"
+          placeholder={t('auth.resetPassword.confirmPasswordPlaceholder')}
           leftIcon={<Lock className="w-4 h-4" />}
           autoComplete="new-password"
           error={errors.passwordConfirmation?.message}
           {...register('passwordConfirmation', {
-            required: 'Please confirm your password',
+            required: t('auth.resetPassword.errors.confirmRequired'),
             validate: (value, formValues) =>
-              value === formValues.password || 'Passwords do not match',
+              value === formValues.password || t('auth.resetPassword.errors.passwordMismatch'),
           })}
         />
 
@@ -193,7 +195,7 @@ export const ResetPasswordView = () => {
           isLoading={isLoading}
           leftIcon={<KeyRound className="w-4 h-4" />}
         >
-          Reset Password
+          {t('auth.resetPassword.submit')}
         </Button>
       </form>
 
@@ -203,7 +205,7 @@ export const ResetPasswordView = () => {
           to="/auth/login"
           className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:underline transition-colors"
         >
-          Cancel and return to sign in
+          {t('auth.resetPassword.cancelAndReturn')}
         </Link>
       </div>
     </div>

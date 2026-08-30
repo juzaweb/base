@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Mail, ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useForgotPasswordMutation } from '../../store/services/authApi';
@@ -14,6 +15,7 @@ interface ForgotPasswordFormInputs {
 }
 
 export const ForgotPasswordView = () => {
+  const { t } = useTranslation();
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -51,11 +53,14 @@ export const ForgotPasswordView = () => {
 
         <div className="space-y-2">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Check your email
+            {t('auth.forgotPassword.success.title')}
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
-            We sent a password reset link to <strong className="text-slate-900 dark:text-slate-200 font-semibold">{submittedEmail}</strong>. Please follow the instructions to reset your password.
-          </p>
+          <p
+            className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto"
+            dangerouslySetInnerHTML={{
+              __html: t('auth.forgotPassword.success.message', { email: submittedEmail }),
+            }}
+          />
         </div>
 
         <div className="pt-2 space-y-3">
@@ -65,7 +70,7 @@ export const ForgotPasswordView = () => {
             className="w-full"
             onClick={() => setIsSubmitted(false)}
           >
-            Send Another Link
+            {t('auth.forgotPassword.success.sendAnother')}
           </Button>
 
           <Link
@@ -73,7 +78,7 @@ export const ForgotPasswordView = () => {
             className="inline-flex items-center justify-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to sign in</span>
+            <span>{t('auth.forgotPassword.backToLogin')}</span>
           </Link>
         </div>
       </div>
@@ -85,10 +90,10 @@ export const ForgotPasswordView = () => {
       {/* Header */}
       <div className="text-center space-y-1.5">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Reset your password
+          {t('auth.forgotPassword.title')}
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Enter the email associated with your account and we&apos;ll send you a recovery link.
+          {t('auth.forgotPassword.subtitle')}
         </p>
       </div>
 
@@ -98,17 +103,17 @@ export const ForgotPasswordView = () => {
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <Input
-          label="Email address"
+          label={t('auth.forgotPassword.emailLabel')}
           type="email"
-          placeholder="you@example.com"
+          placeholder={t('auth.forgotPassword.emailPlaceholder')}
           leftIcon={<Mail className="w-4 h-4" />}
           autoComplete="email"
           error={errors.email?.message}
           {...register('email', {
-            required: 'Email address is required',
+            required: t('auth.forgotPassword.errors.emailRequired'),
             pattern: {
               value: EMAIL_REGEX,
-              message: 'Please enter a valid email address',
+              message: t('auth.forgotPassword.errors.emailInvalid'),
             },
           })}
         />
@@ -121,7 +126,7 @@ export const ForgotPasswordView = () => {
           isLoading={isLoading}
           leftIcon={<Send className="w-4 h-4" />}
         >
-          Send Reset Instructions
+          {t('auth.forgotPassword.submit')}
         </Button>
       </form>
 
@@ -132,7 +137,7 @@ export const ForgotPasswordView = () => {
           className="inline-flex items-center justify-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to sign in</span>
+          <span>{t('auth.forgotPassword.backToLogin')}</span>
         </Link>
       </div>
     </div>

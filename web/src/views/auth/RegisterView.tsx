@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, Eye, EyeOff, User, UserPlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useRegisterMutation } from '../../store/services/authApi';
@@ -19,6 +20,7 @@ interface RegisterFormInputs {
 }
 
 export const RegisterView = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -52,7 +54,12 @@ export const RegisterView = () => {
   };
 
   const strength = getPasswordStrength(passwordValue);
-  const strengthLabels = ['Weak', 'Fair', 'Good', 'Strong'];
+  const strengthLabels = [
+    t('auth.register.strength.weak'),
+    t('auth.register.strength.fair'),
+    t('auth.register.strength.good'),
+    t('auth.register.strength.strong'),
+  ];
   const strengthColors = [
     'bg-rose-500',
     'bg-amber-500',
@@ -76,20 +83,19 @@ export const RegisterView = () => {
   };
 
   const serverErrorMessage = apiError ? getErrorMessage(apiError) : null;
-
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* View Header */}
       <div className="text-center space-y-1.5">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Create an account
+          {t('auth.register.title')}
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Start generating AI-powered websites with SiteStore AI
+          {t('auth.register.subtitle')}
         </p>
       </div>
 
-      <SocialLoginButtons dividerLabel="Or register with email" />
+      <SocialLoginButtons dividerLabel={t('social.orRegisterWith')} />
 
       {/* Backend Error Alert */}
       {serverErrorMessage && <ErrorAlert message={serverErrorMessage} />}
@@ -97,42 +103,42 @@ export const RegisterView = () => {
       {/* Register Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5" noValidate>
         <Input
-          label="Full Name"
+          label={t('auth.register.nameLabel')}
           type="text"
-          placeholder="Alex Tran"
+          placeholder={t('auth.register.namePlaceholder')}
           leftIcon={<User className="w-4 h-4" />}
           autoComplete="name"
           error={errors.name?.message}
           {...register('name', {
-            required: 'Full name is required',
+            required: t('auth.register.errors.nameRequired'),
             minLength: {
               value: 2,
-              message: 'Name must be at least 2 characters',
+              message: t('auth.register.errors.nameMinLength'),
             },
           })}
         />
 
         <Input
-          label="Email address"
+          label={t('auth.register.emailLabel')}
           type="email"
-          placeholder="you@example.com"
+          placeholder={t('auth.register.emailPlaceholder')}
           leftIcon={<Mail className="w-4 h-4" />}
           autoComplete="email"
           error={errors.email?.message}
           {...register('email', {
-            required: 'Email address is required',
+            required: t('auth.register.errors.emailRequired'),
             pattern: {
               value: EMAIL_REGEX,
-              message: 'Please enter a valid email address',
+              message: t('auth.register.errors.emailInvalid'),
             },
           })}
         />
 
         <div className="space-y-1.5">
           <Input
-            label="Password"
+            label={t('auth.register.passwordLabel')}
             type={showPassword ? 'text' : 'password'}
-            placeholder="Min. 8 characters"
+            placeholder={t('auth.register.passwordPlaceholder')}
             leftIcon={<Lock className="w-4 h-4" />}
             autoComplete="new-password"
             error={errors.password?.message}
@@ -151,10 +157,10 @@ export const RegisterView = () => {
               </button>
             }
             {...register('password', {
-              required: 'Password is required',
+              required: t('auth.register.errors.passwordRequired'),
               minLength: {
                 value: MIN_PASSWORD_LENGTH,
-                message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters`,
+                message: t('auth.register.errors.passwordMinLength', { min: MIN_PASSWORD_LENGTH }),
               },
             })}
           />
@@ -176,25 +182,26 @@ export const RegisterView = () => {
               </div>
               <div className="flex justify-between items-center text-[10px] text-slate-400">
                 <span>
-                  Strength: {strength > 0 ? strengthLabels[strength - 1] : 'Too weak'}
+                  {t('auth.register.strength.tooWeak')}
+                  {strength > 0 ? `: ${strengthLabels[strength - 1]}` : ''}
                 </span>
-                <span>8+ chars, uppercase & number recommended</span>
+                <span>{t('auth.register.strength.hint')}</span>
               </div>
             </div>
           )}
         </div>
 
         <Input
-          label="Confirm Password"
+          label={t('auth.register.confirmPasswordLabel')}
           type={showPassword ? 'text' : 'password'}
-          placeholder="Repeat your password"
+          placeholder={t('auth.register.confirmPasswordPlaceholder')}
           leftIcon={<Lock className="w-4 h-4" />}
           autoComplete="new-password"
           error={errors.passwordConfirmation?.message}
           {...register('passwordConfirmation', {
-            required: 'Please confirm your password',
+            required: t('auth.register.errors.confirmRequired'),
             validate: (value, formValues) =>
-              value === formValues.password || 'Passwords do not match',
+              value === formValues.password || t('auth.register.errors.passwordMismatch'),
           })}
         />
 
@@ -205,19 +212,14 @@ export const RegisterView = () => {
               type="checkbox"
               className="w-4 h-4 rounded border-slate-300 dark:border-white/10 text-indigo-600 focus:ring-indigo-500/20 dark:bg-slate-800 mt-0.5 shrink-0"
               {...register('agreeTerms', {
-                required: 'You must accept the terms and privacy policy to continue',
+                required: t('auth.register.errors.termsRequired'),
               })}
             />
             <span className="leading-snug">
-              I agree to the{' '}
-              <a href="#terms" className="text-indigo-600 dark:text-indigo-400 hover:underline">
-                Terms of Service
-              </a>{' '}
-              and{' '}
-              <a href="#privacy" className="text-indigo-600 dark:text-indigo-400 hover:underline">
-                Privacy Policy
-              </a>
-              .
+              {t('auth.register.agreeTerms', {
+                terms: t('auth.register.terms'),
+                privacy: t('auth.register.privacy'),
+              })}
             </span>
           </label>
           {errors.agreeTerms && (
@@ -234,18 +236,18 @@ export const RegisterView = () => {
           isLoading={isLoading}
           leftIcon={<UserPlus className="w-4 h-4" />}
         >
-          Create Free Account
+          {t('auth.register.submit')}
         </Button>
       </form>
 
       {/* Switch to Login */}
       <div className="text-center text-xs text-slate-500 dark:text-slate-400 pt-1">
-        Already have an account?{' '}
+        {t('auth.register.hasAccount')}{' '}
         <Link
           to="/auth/login"
           className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
         >
-          Sign in
+          {t('auth.register.signIn')}
         </Link>
       </div>
     </div>

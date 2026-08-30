@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useLoginMutation } from '../../store/services/authApi';
@@ -17,6 +18,7 @@ interface LoginFormInputs {
 }
 
 export const LoginView = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,10 +57,10 @@ export const LoginView = () => {
       {/* View Header */}
       <div className="text-center space-y-1.5">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Welcome back
+          {t('auth.login.title')}
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Enter your credentials to access your SiteStore AI workspace
+          {t('auth.login.subtitle')}
         </p>
       </div>
 
@@ -70,26 +72,26 @@ export const LoginView = () => {
       {/* Login Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <Input
-          label="Email address"
+          label={t('auth.login.emailLabel')}
           type="email"
-          placeholder="you@example.com"
+          placeholder={t('auth.login.emailPlaceholder')}
           leftIcon={<Mail className="w-4 h-4" />}
           autoComplete="email"
           error={errors.email?.message}
           {...register('email', {
-            required: 'Email address is required',
+            required: t('auth.login.errors.emailRequired'),
             pattern: {
               value: EMAIL_REGEX,
-              message: 'Please enter a valid email address',
+              message: t('auth.login.errors.emailInvalid'),
             },
           })}
         />
 
         <div className="space-y-1">
           <Input
-            label="Password"
+            label={t('auth.login.passwordLabel')}
             type={showPassword ? 'text' : 'password'}
-            placeholder="••••••••"
+            placeholder={t('auth.login.passwordPlaceholder')}
             leftIcon={<Lock className="w-4 h-4" />}
             autoComplete="current-password"
             error={errors.password?.message}
@@ -108,10 +110,10 @@ export const LoginView = () => {
               </button>
             }
             {...register('password', {
-              required: 'Password is required',
+              required: t('auth.login.errors.passwordRequired'),
               minLength: {
                 value: MIN_PASSWORD_LENGTH,
-                message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters`,
+                message: t('auth.login.errors.passwordMinLength', { min: MIN_PASSWORD_LENGTH }),
               },
             })}
           />
@@ -125,14 +127,14 @@ export const LoginView = () => {
               className="w-4 h-4 rounded border-slate-300 dark:border-white/10 text-indigo-600 focus:ring-indigo-500/20 dark:bg-slate-800"
               {...register('rememberMe')}
             />
-            <span>Remember me</span>
+            <span>{t('auth.login.rememberMe')}</span>
           </label>
 
           <Link
             to="/auth/forgot-password"
             className="font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
           >
-            Forgot password?
+            {t('auth.login.forgotPassword')}
           </Link>
         </div>
 
@@ -145,18 +147,18 @@ export const LoginView = () => {
           isLoading={isLoading}
           leftIcon={<LogIn className="w-4 h-4" />}
         >
-          Sign In
+          {t('auth.login.submit')}
         </Button>
       </form>
 
       {/* Switch to Register link */}
       <div className="text-center text-xs text-slate-500 dark:text-slate-400 pt-2">
-        Don&apos;t have an account?{' '}
+        {t('auth.login.noAccount')}{' '}
         <Link
           to="/auth/register"
           className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
         >
-          Create an account
+          {t('auth.login.createAccount')}
         </Link>
       </div>
     </div>

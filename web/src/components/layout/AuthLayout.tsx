@@ -1,9 +1,11 @@
 import type { FC } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Sparkles, Sun, Moon, Zap, CheckCircle2, ShieldCheck, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/useTheme';
 
 export const AuthLayout: FC = () => {
+  const { t } = useTranslation();
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -26,13 +28,13 @@ export const AuthLayout: FC = () => {
           </div>
           <div>
             <div className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
-              <span>SiteStore</span>
+              <span>{t('layout.brand')}</span>
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-                AI
+                {t('layout.brandTag')}
               </span>
             </div>
             <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Intelligent Website Engine
+              {t('layout.brandDesc')}
             </p>
           </div>
         </Link>
@@ -43,7 +45,7 @@ export const AuthLayout: FC = () => {
             type="button"
             onClick={toggleTheme}
             className="p-2.5 rounded-xl text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/[0.06] border border-slate-200/80 dark:border-white/[0.08] transition-all cursor-pointer"
-            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+            title={theme === 'dark' ? t('layout.themeToggle.switchToLight') : t('layout.themeToggle.switchToDark')}
           >
             {theme === 'dark' ? (
               <Sun className="w-4 h-4 text-amber-400" />
@@ -65,15 +67,15 @@ export const AuthLayout: FC = () => {
             <div className="relative z-10 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
                 <Zap className="w-3.5 h-3.5 text-amber-400" />
-                <span>Next-Gen AI Website Builder</span>
+                <span>{t('layout.hero.tag')}</span>
               </div>
 
               <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-                Build & scale high-performing websites with AI in seconds.
+                {t('layout.hero.title')}
               </h2>
 
               <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                Generate production-ready layouts, manage multiple client brands, and automate SEO optimization with cutting-edge artificial intelligence.
+                {t('layout.hero.description')}
               </p>
 
               <div className="pt-4 space-y-3.5 border-t border-slate-200/50 dark:border-white/[0.08]">
@@ -81,21 +83,21 @@ export const AuthLayout: FC = () => {
                   <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
-                  <span>100+ Designer Templates & Archetypes</span>
+                  <span>{t('layout.hero.features.templates')}</span>
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-200 font-medium">
                   <div className="w-6 h-6 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0">
                     <Globe className="w-4 h-4" />
                   </div>
-                  <span>Instant Custom Domain & Edge CDN Deployments</span>
+                  <span>{t('layout.hero.features.deploy')}</span>
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-200 font-medium">
                   <div className="w-6 h-6 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-500 shrink-0">
                     <ShieldCheck className="w-4 h-4" />
                   </div>
-                  <span>Enterprise Security & JWT Role Access</span>
+                  <span>{t('layout.hero.features.security')}</span>
                 </div>
               </div>
             </div>
@@ -103,15 +105,15 @@ export const AuthLayout: FC = () => {
             {/* Testimonial / Social proof footer */}
             <div className="relative z-10 mt-8 p-4 rounded-2xl bg-white/40 dark:bg-white/[0.04] border border-white/40 dark:border-white/[0.06] backdrop-blur-sm">
               <p className="text-xs italic text-slate-600 dark:text-slate-300">
-                &ldquo;SiteStore AI reduced our landing page delivery time from 3 weeks to under 15 minutes.&rdquo;
+                &ldquo;{t('layout.testimonial.quote')}&rdquo;
               </p>
               <div className="mt-2.5 flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 text-white text-[10px] font-bold flex items-center justify-center">
                   AT
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-slate-900 dark:text-white">Alex Tran</div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">Head of Growth at TechWave</div>
+                  <div className="text-xs font-semibold text-slate-900 dark:text-white">{t('layout.testimonial.author')}</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400">{t('layout.testimonial.role')}</div>
                 </div>
               </div>
             </div>
@@ -128,16 +130,16 @@ export const AuthLayout: FC = () => {
 
       {/* Footer */}
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200/60 dark:border-white/[0.06]">
-        <div>© 2026 SiteStore AI. All rights reserved.</div>
+        <div>{t('layout.footer.copyright')}</div>
         <div className="flex items-center gap-6">
           <a href="#privacy" className="hover:text-indigo-500 transition-colors">
-            Privacy Policy
+            {t('layout.footer.privacy')}
           </a>
           <a href="#terms" className="hover:text-indigo-500 transition-colors">
-            Terms of Service
+            {t('layout.footer.terms')}
           </a>
           <a href="#support" className="hover:text-indigo-500 transition-colors">
-            Help & Support
+            {t('layout.footer.support')}
           </a>
         </div>
       </footer>

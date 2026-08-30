@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { MailCheck, ArrowRight, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useResendVerificationEmailMutation } from '../../store/services/authApi';
 import { getErrorMessage } from '../../utils/apiError';
 
 export const VerifyEmailView = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const emailParam = searchParams.get('email') || '';
@@ -32,7 +34,7 @@ export const VerifyEmailView = () => {
   const handleResend = async () => {
     setValidationError(null);
     if (!email) {
-      setValidationError('Please specify an email address.');
+      setValidationError(t('auth.verifyEmail.errors.emailRequired'));
       return;
     }
 
@@ -58,10 +60,12 @@ export const VerifyEmailView = () => {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Verify your email
+          {t('auth.verifyEmail.title')}
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
-          We sent a verification link to your email address{email ? ` (${email})` : ''}. Please check your inbox and spam folder to activate your account.
+          {t('auth.verifyEmail.message', {
+            emailSuffix: email ? ` (${email})` : '',
+          })}
         </p>
       </div>
 
@@ -69,7 +73,7 @@ export const VerifyEmailView = () => {
       {resendStatus === 'sent' && (
         <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs flex items-center justify-center gap-2">
           <CheckCircle2 className="w-4 h-4" />
-          <span>A fresh verification link has been sent!</span>
+          <span>{t('auth.verifyEmail.resentSuccess')}</span>
         </div>
       )}
 
@@ -82,9 +86,9 @@ export const VerifyEmailView = () => {
 
       {!emailParam && (
         <Input
-          label="Email address"
+          label={t('auth.verifyEmail.emailLabel')}
           type="email"
-          placeholder="you@example.com"
+          placeholder={t('auth.verifyEmail.emailPlaceholder')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -100,7 +104,7 @@ export const VerifyEmailView = () => {
           onClick={() => navigate('/auth/login')}
           rightIcon={<ArrowRight className="w-4 h-4" />}
         >
-          Continue
+          {t('auth.verifyEmail.continue')}
         </Button>
 
         <Button
@@ -111,7 +115,7 @@ export const VerifyEmailView = () => {
           isLoading={isLoading}
           leftIcon={<RefreshCw className="w-4 h-4" />}
         >
-          Resend Verification Email
+          {t('auth.verifyEmail.resend')}
         </Button>
       </div>
 
@@ -121,7 +125,7 @@ export const VerifyEmailView = () => {
           to="/auth/login"
           className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:underline transition-colors"
         >
-          Sign in with another account
+          {t('auth.verifyEmail.signInAnother')}
         </Link>
       </div>
     </div>
