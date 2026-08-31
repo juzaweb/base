@@ -7,23 +7,23 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["email", "password"],
+    required: ['email', 'password'],
     properties: [
         new OA\Property(
-            property: "email",
-            type: "string",
-            format: "email",
-            example: "admin@example.com"
+            property: 'email',
+            type: 'string',
+            format: 'email',
+            example: 'admin@example.com'
         ),
         new OA\Property(
-            property: "password",
-            type: "string",
-            format: "password",
-            example: "password"
+            property: 'password',
+            type: 'string',
+            format: 'password',
+            example: 'password'
         ),
         new OA\Property(
-            property: "remember",
-            type: "boolean",
+            property: 'remember',
+            type: 'boolean',
             nullable: true,
             example: false
         ),

@@ -7,25 +7,25 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["current_password", "password", "password_confirmation"],
+    required: ['current_password', 'password', 'password_confirmation'],
     properties: [
         new OA\Property(
-            property: "current_password",
-            type: "string",
-            format: "password",
-            example: "OldPassword123!"
+            property: 'current_password',
+            type: 'string',
+            format: 'password',
+            example: 'OldPassword123!'
         ),
         new OA\Property(
-            property: "password",
-            type: "string",
-            format: "password",
-            example: "NewPassword123!"
+            property: 'password',
+            type: 'string',
+            format: 'password',
+            example: 'NewPassword123!'
         ),
         new OA\Property(
-            property: "password_confirmation",
-            type: "string",
-            format: "password",
-            example: "NewPassword123!"
+            property: 'password_confirmation',
+            type: 'string',
+            format: 'password',
+            example: 'NewPassword123!'
         ),
     ]
 )]

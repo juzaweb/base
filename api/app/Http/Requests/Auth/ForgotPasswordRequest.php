@@ -7,13 +7,13 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["email"],
+    required: ['email'],
     properties: [
         new OA\Property(
-            property: "email",
-            type: "string",
-            format: "email",
-            example: "admin@example.com"
+            property: 'email',
+            type: 'string',
+            format: 'email',
+            example: 'admin@example.com'
         ),
     ]
 )]

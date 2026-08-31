@@ -8,14 +8,14 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["token", "user"],
+    required: ['token', 'user'],
     properties: [
         new OA\Property(
-            property: "token",
+            property: 'token',
             type: TokenResource::class
         ),
         new OA\Property(
-            property: "user",
+            property: 'user',
             type: UserResource::class
         ),
     ]

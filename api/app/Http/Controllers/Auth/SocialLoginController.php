@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthResource;
-use App\Http\Resources\MessageResource;
 use App\Http\Resources\SocialRedirectResource;
 use App\Models\User;
 use App\Models\UserSocialConnection;
@@ -12,6 +11,7 @@ use Exception;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -54,15 +54,15 @@ class SocialLoginController extends Controller
      * List configured social providers so the frontend can render buttons dynamically.
      */
     #[OA\Get(
-        path: "/api/v1/auth/social-providers",
-        summary: "List available social login providers",
-        operationId: "user.social.providers",
-        tags: ["Auth"],
+        path: '/api/v1/auth/social-providers',
+        summary: 'List available social login providers',
+        operationId: 'user.social.providers',
+        tags: ['Auth'],
         responses: [
-            new OA\Response(response: 200, description: "Available providers"),
+            new OA\Response(response: 200, description: 'Available providers'),
         ]
     )]
-    public function providers(): \Illuminate\Http\JsonResponse
+    public function providers(): JsonResponse
     {
         $available = collect(self::SUPPORTED_DRIVERS)
             ->filter(fn (string $driver) => !empty(env(self::DRIVER_ENV_MAP[$driver])))
@@ -76,30 +76,30 @@ class SocialLoginController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/v1/auth/user/social/{driver}/redirect",
-        summary: "Login User with Social Redirect",
-        operationId: "user.social.redirect",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/social/{driver}/redirect',
+        summary: 'Login User with Social Redirect',
+        operationId: 'user.social.redirect',
+        tags: ['Auth'],
         parameters: [
             new OA\Parameter(
-                name: "driver",
-                in: "path",
+                name: 'driver',
+                in: 'path',
                 required: true,
-                description: "Social Driver (google, facebook, github)",
-                schema: new OA\Schema(type: "string")
+                description: 'Social Driver (google, facebook, github)',
+                schema: new OA\Schema(type: 'string')
             ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Redirect URL generated",
+                description: 'Redirect URL generated',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: SocialRedirectResource::class),
+                        new OA\Property(property: 'data', type: SocialRedirectResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Provider error"),
+            new OA\Response(response: 422, description: 'Provider error'),
         ]
     )]
     public function redirect(string $driver): SocialRedirectResource
@@ -129,30 +129,30 @@ class SocialLoginController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/social/{driver}/callback",
-        summary: "Login User with Social Callback",
-        operationId: "user.social.callback",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/social/{driver}/callback',
+        summary: 'Login User with Social Callback',
+        operationId: 'user.social.callback',
+        tags: ['Auth'],
         parameters: [
             new OA\Parameter(
-                name: "driver",
-                in: "path",
+                name: 'driver',
+                in: 'path',
                 required: true,
-                description: "Social Driver",
-                schema: new OA\Schema(type: "string")
+                description: 'Social Driver',
+                schema: new OA\Schema(type: 'string')
             ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Social Login Success",
+                description: 'Social Login Success',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: AuthResource::class),
+                        new OA\Property(property: 'data', type: AuthResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Authentication failed"),
+            new OA\Response(response: 422, description: 'Authentication failed'),
         ]
     )]
     public function callback(Request $request, string $driver): AuthResource

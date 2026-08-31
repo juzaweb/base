@@ -36,32 +36,32 @@ class AuthController extends Controller
     use ConvertsPsrResponses;
 
     #[OA\Post(
-        path: "/api/v1/auth/user/login",
-        summary: "Login User",
-        operationId: "user.login",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/login',
+        summary: 'Login User',
+        operationId: 'user.login',
+        tags: ['Auth'],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
                 new OA\MediaType(
-                    mediaType: "application/json",
+                    mediaType: 'application/json',
                     schema: new OA\Schema(
                         type: LoginRequest::class
                     )
-                )
+                ),
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Login Success",
+                description: 'Login Success',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: AuthResource::class),
+                        new OA\Property(property: 'data', type: AuthResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Validation or Authentication Error"),
+            new OA\Response(response: 422, description: 'Validation or Authentication Error'),
         ]
     )]
     public function login(LoginRequest $request): AuthResource
@@ -90,32 +90,32 @@ class AuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/refresh-token",
-        summary: "Refresh Token",
-        operationId: "user.refresh",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/refresh-token',
+        summary: 'Refresh Token',
+        operationId: 'user.refresh',
+        tags: ['Auth'],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
                 new OA\MediaType(
-                    mediaType: "application/json",
+                    mediaType: 'application/json',
                     schema: new OA\Schema(
                         type: RefreshTokenRequest::class
                     )
-                )
+                ),
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Token Refreshed",
+                description: 'Token Refreshed',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: TokenResource::class),
+                        new OA\Property(property: 'data', type: TokenResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Invalid Refresh Token"),
+            new OA\Response(response: 422, description: 'Invalid Refresh Token'),
         ]
     )]
     public function refreshToken(RefreshTokenRequest $request): TokenResource
@@ -153,32 +153,32 @@ class AuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/register",
-        summary: "Register New User",
-        operationId: "user.register",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/register',
+        summary: 'Register New User',
+        operationId: 'user.register',
+        tags: ['Auth'],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
                 new OA\MediaType(
-                    mediaType: "application/json",
+                    mediaType: 'application/json',
                     schema: new OA\Schema(
                         type: RegisterRequest::class
                     )
-                )
+                ),
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Registration Success",
+                description: 'Registration Success',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: UserResource::class),
+                        new OA\Property(property: 'data', type: UserResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Validation Error"),
+            new OA\Response(response: 422, description: 'Validation Error'),
         ]
     )]
     public function register(RegisterRequest $request): UserResource
@@ -200,32 +200,32 @@ class AuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/resend-verification-email",
-        summary: "Resend Verification Email",
-        operationId: "user.resend-verification-email",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/resend-verification-email',
+        summary: 'Resend Verification Email',
+        operationId: 'user.resend-verification-email',
+        tags: ['Auth'],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
                 new OA\MediaType(
-                    mediaType: "application/json",
+                    mediaType: 'application/json',
                     schema: new OA\Schema(
                         type: ResendVerificationEmailRequest::class
                     )
-                )
+                ),
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Verification Link Sent",
+                description: 'Verification Link Sent',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: MessageResource::class),
+                        new OA\Property(property: 'data', type: MessageResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Validation Error"),
+            new OA\Response(response: 422, description: 'Validation Error'),
         ]
     )]
     public function resendVerificationEmail(ResendVerificationEmailRequest $request): MessageResource
@@ -244,25 +244,25 @@ class AuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/email/verify/{id}/{hash}",
-        summary: "Verify Email",
-        operationId: "user.verify-email",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/email/verify/{id}/{hash}',
+        summary: 'Verify Email',
+        operationId: 'user.verify-email',
+        tags: ['Auth'],
         parameters: [
-            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "string")),
-            new OA\Parameter(name: "hash", in: "path", required: true, schema: new OA\Schema(type: "string")),
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'hash', in: 'path', required: true, schema: new OA\Schema(type: 'string')),
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Email Verified",
+                description: 'Email Verified',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: MessageResource::class),
+                        new OA\Property(property: 'data', type: MessageResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Invalid Token"),
+            new OA\Response(response: 422, description: 'Invalid Token'),
         ]
     )]
     public function verifyEmail(Request $request, string $id, string $hash): MessageResource
@@ -284,28 +284,28 @@ class AuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/forgot-password",
-        summary: "Forgot Password",
-        operationId: "user.forgot-password",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/forgot-password',
+        summary: 'Forgot Password',
+        operationId: 'user.forgot-password',
+        tags: ['Auth'],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
                 new OA\MediaType(
-                    mediaType: "application/json",
+                    mediaType: 'application/json',
                     schema: new OA\Schema(
                         type: ForgotPasswordRequest::class
                     )
-                )
+                ),
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Password reset link emailed",
+                description: 'Password reset link emailed',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: MessageResource::class),
+                        new OA\Property(property: 'data', type: MessageResource::class),
                     ]
                 )
             ),
@@ -324,32 +324,32 @@ class AuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/reset-password",
-        summary: "Reset Password",
-        operationId: "user.reset-password",
-        tags: ["Auth"],
+        path: '/api/v1/auth/user/reset-password',
+        summary: 'Reset Password',
+        operationId: 'user.reset-password',
+        tags: ['Auth'],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
                 new OA\MediaType(
-                    mediaType: "application/json",
+                    mediaType: 'application/json',
                     schema: new OA\Schema(
                         type: ResetPasswordRequest::class
                     )
-                )
+                ),
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Password Reset Success",
+                description: 'Password Reset Success',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: MessageResource::class),
+                        new OA\Property(property: 'data', type: MessageResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Validation Error"),
+            new OA\Response(response: 422, description: 'Validation Error'),
         ]
     )]
     public function resetPassword(ResetPasswordRequest $request): MessageResource
@@ -374,33 +374,33 @@ class AuthController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/v1/auth/user/change-password",
-        summary: "Change Password",
-        operationId: "user.change-password",
-        tags: ["Auth"],
-        security: [["bearerAuth" => []]],
+        path: '/api/v1/auth/user/change-password',
+        summary: 'Change Password',
+        operationId: 'user.change-password',
+        tags: ['Auth'],
+        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
                 new OA\MediaType(
-                    mediaType: "application/json",
+                    mediaType: 'application/json',
                     schema: new OA\Schema(
                         type: ChangePasswordRequest::class
                     )
-                )
+                ),
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Password Changed",
+                description: 'Password Changed',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: MessageResource::class),
+                        new OA\Property(property: 'data', type: MessageResource::class),
                     ]
                 )
             ),
-            new OA\Response(response: 422, description: "Validation Error"),
+            new OA\Response(response: 422, description: 'Validation Error'),
         ]
     )]
     public function changePassword(ChangePasswordRequest $request): MessageResource
@@ -421,18 +421,18 @@ class AuthController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/auth/user/logout",
-        summary: "Logout",
-        operationId: "user.logout",
-        tags: ["Auth"],
-        security: [["bearerAuth" => []]],
+        path: '/api/v1/auth/user/logout',
+        summary: 'Logout',
+        operationId: 'user.logout',
+        tags: ['Auth'],
+        security: [['bearerAuth' => []]],
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Logout Success",
+                description: 'Logout Success',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "data", type: MessageResource::class),
+                        new OA\Property(property: 'data', type: MessageResource::class),
                     ]
                 )
             ),

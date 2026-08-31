@@ -7,12 +7,12 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["refresh_token"],
+    required: ['refresh_token'],
     properties: [
         new OA\Property(
-            property: "refresh_token",
-            type: "string",
-            example: "def50200..."
+            property: 'refresh_token',
+            type: 'string',
+            example: 'def50200...'
         ),
     ]
 )]

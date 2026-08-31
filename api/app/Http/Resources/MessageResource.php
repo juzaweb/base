@@ -8,12 +8,12 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["message"],
+    required: ['message'],
     properties: [
         new OA\Property(
-            property: "message",
-            type: "string",
-            example: "Operation successful"
+            property: 'message',
+            type: 'string',
+            example: 'Operation successful'
         ),
     ]
 )]

@@ -101,7 +101,7 @@ return [
         | This path will also be added automatically to the list of scanned folders.
         |
         */
-        'modules' => base_path('Modules'),
+        'modules' => base_path('modules'),
 
         /*
         |--------------------------------------------------------------------------
@@ -274,7 +274,7 @@ return [
     |
     */
     'composer' => [
-        'vendor' => env('MODULE_VENDOR', 'nwidart'),
+        'vendor' => env('MODULE_VENDOR', 'juzaweb'),
         'author' => [
             'name' => env('MODULE_AUTHOR_NAME', 'Nicolas Widart'),
             'email' => env('MODULE_AUTHOR_EMAIL', 'n.widart@gmail.com'),
@@ -309,7 +309,7 @@ return [
     'activators' => [
         'file' => [
             'class' => FileActivator::class,
-            'statuses-file' => base_path('modules_statuses.json'),
+            'statuses-file' => base_path('modules/statuses.json'),
         ],
     ],
 

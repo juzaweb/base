@@ -13,11 +13,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Passport;
+use Modules\Membership\Traits\HasMembership;
 
 class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, HasPassportPasswordGrant, HasUuids, Notifiable;
+    use HasApiTokens, HasFactory, HasMembership, HasPassportPasswordGrant, HasUuids, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable
      * @return array<string, string>
      */
     public const ROLE_USER = 'user';
+
     public const ROLE_ADMIN = 'admin';
 
     protected function casts(): array

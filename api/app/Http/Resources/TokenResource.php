@@ -8,33 +8,33 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["token_type", "expires_in", "expires_at", "access_token", "refresh_token"],
+    required: ['token_type', 'expires_in', 'expires_at', 'access_token', 'refresh_token'],
     properties: [
         new OA\Property(
-            property: "token_type",
-            type: "string",
-            example: "Bearer"
+            property: 'token_type',
+            type: 'string',
+            example: 'Bearer'
         ),
         new OA\Property(
-            property: "expires_in",
-            type: "integer",
+            property: 'expires_in',
+            type: 'integer',
             example: 31536000
         ),
         new OA\Property(
-            property: "expires_at",
-            type: "string",
-            format: "date-time",
-            example: "2027-08-16T09:00:00.000000Z"
+            property: 'expires_at',
+            type: 'string',
+            format: 'date-time',
+            example: '2027-08-16T09:00:00.000000Z'
         ),
         new OA\Property(
-            property: "access_token",
-            type: "string",
-            example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIs..."
+            property: 'access_token',
+            type: 'string',
+            example: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIs...'
         ),
         new OA\Property(
-            property: "refresh_token",
-            type: "string",
-            example: "def50200..."
+            property: 'refresh_token',
+            type: 'string',
+            example: 'def50200...'
         ),
     ]
 )]

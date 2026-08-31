@@ -8,17 +8,17 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["redirect_url", "provider"],
+    required: ['redirect_url', 'provider'],
     properties: [
         new OA\Property(
-            property: "redirect_url",
-            type: "string",
-            example: "https://accounts.google.com/o/oauth2/auth..."
+            property: 'redirect_url',
+            type: 'string',
+            example: 'https://accounts.google.com/o/oauth2/auth...'
         ),
         new OA\Property(
-            property: "provider",
-            type: "string",
-            example: "google"
+            property: 'provider',
+            type: 'string',
+            example: 'google'
         ),
     ]
 )]

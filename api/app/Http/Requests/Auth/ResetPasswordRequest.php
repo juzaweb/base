@@ -7,30 +7,30 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: __CLASS__,
-    required: ["token", "email", "password", "password_confirmation"],
+    required: ['token', 'email', 'password', 'password_confirmation'],
     properties: [
         new OA\Property(
-            property: "token",
-            type: "string",
-            example: "abc123token"
+            property: 'token',
+            type: 'string',
+            example: 'abc123token'
         ),
         new OA\Property(
-            property: "email",
-            type: "string",
-            format: "email",
-            example: "admin@example.com"
+            property: 'email',
+            type: 'string',
+            format: 'email',
+            example: 'admin@example.com'
         ),
         new OA\Property(
-            property: "password",
-            type: "string",
-            format: "password",
-            example: "NewPassword123!"
+            property: 'password',
+            type: 'string',
+            format: 'password',
+            example: 'NewPassword123!'
         ),
         new OA\Property(
-            property: "password_confirmation",
-            type: "string",
-            format: "password",
-            example: "NewPassword123!"
+            property: 'password_confirmation',
+            type: 'string',
+            format: 'password',
+            example: 'NewPassword123!'
         ),
     ]
 )]
